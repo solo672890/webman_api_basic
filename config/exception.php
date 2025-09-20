@@ -13,5 +13,7 @@
  */
 
 return [
-    '' => \support\exception\Handler::class,
+    '' => \app\exception\src\Handler::class,
+
+    'dont_report'=>[],
 ];
