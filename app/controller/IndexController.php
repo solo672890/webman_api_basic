@@ -3,6 +3,7 @@
 namespace app\controller;
 
 use app\exception\SmsException;
+use Monolog\Logger;
 use support\Request;
 
 class IndexController
@@ -23,10 +24,15 @@ class IndexController
     }
 
     public function testException(Request $request){
-//        $a=1;
-//        $b=0;
-//        $c=$a/$b;
-        throw new SmsException(statusCode: 500);
+        try {
+            $a=1;
+            $b=0;
+            $c=$a/$b;
+        }catch (\Throwable $e){
+
+            writeLog('program error','other',['msg'=>'错误记录'],Logger::WARNING,$e);
+        }
+        throw new SmsException();
         return json(['code' => 0, 'msg' => 'ok']);
     }
 
