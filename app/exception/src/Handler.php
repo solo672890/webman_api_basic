@@ -78,8 +78,7 @@ class Handler extends ExceptionHandler {
     public function report(Throwable $exception) {
         $this->dontReport = config('exception.dont_report', []);
         $propertyHas = property_exists($exception, 'statusCode');
-
-        if ($propertyHas && $exception->statusCode === 200) {
+        if ($propertyHas && $exception->statusCode !== 500) {
             $this->dontReport[] = get_class($exception);
         }
 
@@ -243,8 +242,11 @@ class Handler extends ExceptionHandler {
             $logInfo = '  [request_IP]:' . request()->getRealIp() .'  [visit_URL]:'. ltrim(request()->fullUrl(), '/'). $line;
             $requestParams = request()->all();
         }
-        $logInfo.="error_message : ".$exception->errorMessage??$exception->getMessage();
-        $logInfo.="\n";
+        $error_message=$exception->getMessage();
+        if(!$error_message && property_exists($exception,'errorMessage')){
+            $error_message=$exception->errorMessage;
+        }
+        $logInfo.="error_message : ".$error_message."\n";
         $tempArr = array_filter([
                 'request_params' => $requestParams,
                 'exception' => ['file' => $exception->getFile(), 'line' => $exception->getLine()],

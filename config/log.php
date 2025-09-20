@@ -13,18 +13,30 @@
  */
 
 return [
-    'default' => [
+    'default' => [  //只处理项目系统级别的异常
         'handlers' => [
             [
-                'class' => Monolog\Handler\RotatingFileHandler::class,
-                'constructor' => [
-                    runtime_path() . '/logs/webman.log',
-                    7, //$maxFiles
-                    Monolog\Logger::DEBUG,
+                'class' => \support\MonologExtendHandler::class,
+                'constructor' => ['systemException', 10000000, //$maxFileSize
+                    Monolog\Logger::DEBUG,true, 0755
                 ],
                 'formatter' => [
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    'constructor' => [null, 'Y-m-d H:i:s', true],
+                    'constructor' => [null, 'Y-m-d H:i:s', true,true],
+                ],
+            ]
+        ],
+    ],
+    'dailyCheck' => [  //巡检区日志
+        'handlers' => [
+            [
+                'class' => \support\MonologExtendHandler::class,
+                'constructor' => ['dailyCheck', 10000000, //$maxFileSize
+                    Monolog\Logger::DEBUG,true, 0755
+                ],
+                'formatter' => [
+                    'class' => Monolog\Formatter\LineFormatter::class,
+                    'constructor' => [null, 'Y-m-d H:i:s', true,true],
                 ],
             ]
         ],
