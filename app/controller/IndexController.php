@@ -3,6 +3,9 @@
 namespace app\controller;
 
 use app\exception\SmsException;
+use app\extends\task\factory\TaskClient;
+use app\extends\task\Test1;
+use app\extends\task\Test2;
 use Monolog\Logger;
 use support\Request;
 
@@ -24,15 +27,13 @@ class IndexController
     }
 
     public function testException(Request $request){
-        try {
-            $a=1;
-            $b=0;
-            $c=$a/$b;
-        }catch (\Throwable $e){
-
-            writeLog('program error','other',['msg'=>'错误记录'],Logger::WARNING,$e);
-        }
-        throw new SmsException();
+        $post = [1, 2];
+        TaskClient::setHandlerClass(Test1::class)->send($post);
+        //第二参数可以接收Task::class处理的结果
+        TaskClient::setHandlerClass(Test2::class)->send($post,function ($res){
+            var_dump($res);
+            var_dump('收到结果task2');
+        });
         return json(['code' => 0, 'msg' => 'ok']);
     }
 

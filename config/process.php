@@ -58,5 +58,17 @@ return [
                 'enable_memory_monitor' => DIRECTORY_SEPARATOR === '/',
             ]
         ]
-    ]
+    ],
+    'task' => [
+        'handler' => \app\extends\task\factory\TaskServer::class,//异步处理中心类
+        'listen' => 'text://0.0.0.0:12345', //异步处理进程
+        'count' => 1, //进程数量，默认为1
+        'reusePort' => true, //是否负载均衡到n个进程
+    ],
+    'rpc' => [
+        'handler' => \app\extends\rpc\src\RpcProtocol::class,
+        'listen' => config('server.rpc.local_rpc_address'), //监听客户端发送过来的请求
+        'count' => 6, //进程数量，默认为1
+        'reusePort' => true, //是否负载均衡到n个进程
+    ],
 ];

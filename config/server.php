@@ -21,10 +21,11 @@ return [
     'log_file' => runtime_path() . '/logs/workerman.log',
     'max_package_size' => 10 * 1024 * 1024,
     'rpc'=>[
-        //服务端调用地址
+        'enable'=>false,
+        //请求服务端的地址 (如果作为客户端,这是请求远端的地址)
         'remote_rpc_address'=>getenv('APP_REMOTE_RPC_ADDRESS',''),
-        //客户端监听地址
-        'local_rpc_address'=>'text://'.getenv('APP_LOCAL_RPC_ADDRESS').':12345',
+        //客户端监听地址  (如果作为服务端,这是监听的进程地址,用来处理客户端发过来的请求)
+        'local_rpc_address'=>'text://'.getenv('APP_LOCAL_RPC_ADDRESS').':12346',
         //服务端处理类namespace
         'namespace'=>'\\app\\extends\\rpc\\',
     ],
