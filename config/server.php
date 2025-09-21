@@ -14,10 +14,18 @@
 
 return [
     'event_loop' => '',
-    'stop_timeout' => 2,
+    'stop_timeout' => 30,
     'pid_file' => runtime_path() . '/webman.pid',
     'status_file' => runtime_path() . '/webman.status',
     'stdout_file' => runtime_path() . '/logs/stdout.log',
     'log_file' => runtime_path() . '/logs/workerman.log',
-    'max_package_size' => 10 * 1024 * 1024
+    'max_package_size' => 10 * 1024 * 1024,
+    'rpc'=>[
+        //服务端调用地址
+        'remote_rpc_address'=>getenv('APP_REMOTE_RPC_ADDRESS',''),
+        //客户端监听地址
+        'local_rpc_address'=>'text://'.getenv('APP_LOCAL_RPC_ADDRESS').':12345',
+        //服务端处理类namespace
+        'namespace'=>'\\app\\extends\\rpc\\',
+    ],
 ];
