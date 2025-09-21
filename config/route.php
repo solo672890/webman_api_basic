@@ -15,6 +15,23 @@
 use Webman\Route;
 
 
+$POSTt=['POST','OPTIONS'];
+$GETt=['GET','OPTIONS'];
+Route::group('/v1/', function () use($POSTt,$GETt){
+    Route::add($GETt,'index',[\app\controller\api\v1\IndexController::class,'index']);
+    Route::add($POSTt,'testException',[\app\controller\api\v1\IndexController::class,'testException']);
+    Route::any('ping',[\app\controller\api\v1\IndexController::class,'ping']);
+
+});
+
+
+
+Route::fallback(function(){
+    return view('404', ['error' => 'some error'])->withStatus(404);
+});
+Route::disableDefaultRoute();
+
+
 
 
 

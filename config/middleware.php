@@ -15,5 +15,6 @@
 return [
     ''=>[
         \app\middleware\CORSMiddleware::class,
+//        \app\middleware\AuthMiddleware::class,
     ]
 ];
