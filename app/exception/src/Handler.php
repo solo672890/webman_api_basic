@@ -13,6 +13,7 @@ use app\exception\src\Exception\BaseException;
 use app\exception\src\Exception\ServerErrorHttpException;
 use FastRoute\BadRouteException;
 use InvalidArgumentException;
+use support\Log;
 use Throwable;
 use Webman\Exception\ExceptionHandler;
 use Webman\Http\Request;
@@ -85,6 +86,7 @@ class Handler extends ExceptionHandler {
         if ($this->shouldntReport($exception)) {
             return;
         }
+
         $this->writeLog($exception);
 
     }
@@ -107,8 +109,8 @@ class Handler extends ExceptionHandler {
         $this->addRequestInfoToResponse($request);
         $this->solveAllException($exception);
         $this->addDebugInfoToResponse($exception);
-        $this->triggerDingDingNotifyEvent($exception);
-        $this->triggerTraceEvent($exception);
+//        $this->triggerDingDingNotifyEvent($exception);
+//        $this->triggerTraceEvent($exception);
 
         return $this->buildResponse();
     }
@@ -129,7 +131,7 @@ class Handler extends ExceptionHandler {
      * @param Throwable $e
      */
     protected function solveAllException(Throwable $e) {
-        if ($e instanceof BaseException) {
+        if ($e instanceof BaseException) {  //处理自定义异常
             $this->statusCode = $e->statusCode;
             $this->header = $e->header;
             $this->errorCode = $e->errorCode;
@@ -138,37 +140,40 @@ class Handler extends ExceptionHandler {
             if (isset($e->data)) {
                 $this->responseData = array_merge($this->responseData, $e->data);
             }
-            if (!$e instanceof ServerErrorHttpException) {
-                return;
-            }
+        }else{
+
+            $this->solveSystemException($e);
         }
-        $this->solveExtraException($e);
     }
 
     /**
-     * @desc: 处理扩展的异常
+     * @desc: 处理项目产生系统的异常
      * @param Throwable $e
      * @author Tinywan(ShaoBo Wan)
      */
-    protected function solveExtraException(Throwable $e): void {
-//        $status = $this->config['status'];
+    protected function solveSystemException(Throwable $e): void {
 
         $this->errorMessage = 'sorry,we are make a mistake!';
-        if (config('app.debug', false)) {
+        //把原本500的http code 替换成200,
+        $this->statusCode = 200;
+        $debug=config('app.debug', false);
+        if ($debug) {
             $this->errorMessage = $e->getMessage();
         }
 
-        if ($e instanceof BadRouteException) {
-            $this->statusCode = 404;
-        } elseif ($e instanceof InvalidArgumentException) {
-            $this->statusCode = 415;
-            $this->errorMessage = $e->getMessage();
-        } elseif ($e instanceof ServerErrorHttpException) {
-            $this->statusCode = 500;
-        } else {
-            $this->statusCode = 200;
-            $this->error = $e->getMessage();
-        }
+
+
+        //自行扩展
+//        if ($e instanceof BadRouteException) {
+//            $this->statusCode = 404;
+//        } elseif ($e instanceof InvalidArgumentException) {
+//            $this->statusCode = 415;
+//        } elseif ($e instanceof ServerErrorHttpException) {
+//            $this->statusCode = 500;
+//        } else {
+//            $this->statusCode = 200;
+//            $this->error = $e->getMessage();
+//        }
     }
 
     /**
@@ -246,15 +251,16 @@ class Handler extends ExceptionHandler {
         if(!$error_message && property_exists($exception,'errorMessage')){
             $error_message=$exception->errorMessage;
         }
-        $logInfo.="error_message : ".$error_message."\n";
+        $logInfo.="record msg: ".$error_message."\n";
+
         $tempArr = array_filter([
-                'request_params' => $requestParams,
+                'request_data' => $requestParams,
                 'exception' => ['file' => $exception->getFile(), 'line' => $exception->getLine()],
                 'error_trace' => array_slice(explode("\n", $exception->getTraceAsString()), 0, 4),
             ]
         );
 
-        $logInfo .= $tempArr ? json_encode($tempArr) . "\n" : '';
-        $this->logger->error($logInfo);
+        $logInfo .= $tempArr ? json_encode($tempArr) . "\n" : "\n";
+        Log::error($logInfo);
     }
 }

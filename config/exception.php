@@ -15,5 +15,5 @@
 return [
     '' => \app\exception\src\Handler::class,
 
-    'dont_report'=>[],
+    'dont_report'=>[], //不需要写入日志的异常类
 ];

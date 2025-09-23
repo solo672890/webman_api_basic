@@ -16,10 +16,7 @@ use Webman\MiddlewareInterface;
  */
 class AuthMiddleware implements MiddlewareInterface {
     public function process(Request $request, callable $handler): Response {
-        var_dump($request->route->param('noAuth'));
-        if($request->route->param('noAuth')){
-            return $handler($request);
-        }
+
         try {
             $request->user=JwtToken::getUser();
         }catch (JwtTokenException $exception){

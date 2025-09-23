@@ -13,7 +13,7 @@
  */
 
 return [
-    'default' => [  //只处理项目系统级别的异常
+    'default' => [  //默认channel 只处理项目系统级别的异常
         'handlers' => [
             [
                 'class' => \support\MonologExtendHandler::class,

@@ -19,7 +19,8 @@ $POSTt=['POST','OPTIONS'];
 $GETt=['GET','OPTIONS'];
 Route::group('/v1/', function () use($POSTt,$GETt){
     Route::add($GETt,'index',[\app\controller\api\v1\IndexController::class,'index']);
-    Route::add($POSTt,'testException',[\app\controller\api\v1\IndexController::class,'testException']);
+    Route::add($GETt,'testException',[\app\controller\api\v1\IndexController::class,'testException']);
+    Route::add($GETt,'testException1',[\app\controller\api\v1\IndexController::class,'testException1']);
     Route::any('ping',[\app\controller\api\v1\IndexController::class,'ping']);
 
 });

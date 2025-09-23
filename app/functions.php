@@ -6,7 +6,7 @@
 
 
 if (!function_exists('writeLog')) {
-    function writeLog(string $msg = '', string $channel = 'other', array $extend = [], $level = 100,  ?Throwable $exception = null,bool $append=false): bool {
+    function writeLog(string $msg = '', string $channel = 'default', array $extend = [], $level = 100,  ?Throwable $exception = null,bool $append=false): bool {
         $requestParams = [];
         $line = "\n-------------------------------------------------------------------\n";
         if (empty(request())) {

@@ -83,6 +83,7 @@ class MonologExtendHandler extends StreamHandler {
      * {@inheritdoc}
      */
     protected function write(array $record): void {
+
         $dateDir = date('Ym') . '/';
         $logBasePath = empty($this->channelDirName) ? $this->runtimeLogPath . $dateDir : $this->runtimeLogPath . $this->channelDirName . '/' . $dateDir;
         $fullLogFilename = $logBasePath . date('d').'.log';
