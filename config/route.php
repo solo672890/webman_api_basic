@@ -23,7 +23,7 @@ Route::group('/v1/', function () use($POSTt,$GETt){
     Route::add($GETt,'testException1',[\app\controller\api\v1\IndexController::class,'testException1']);
     Route::any('ping',[\app\controller\api\v1\IndexController::class,'ping']);
 
-});
+})->middleware([\app\middleware\LimiterMiddleware::class]);
 
 
 

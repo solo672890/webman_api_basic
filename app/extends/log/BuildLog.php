@@ -92,12 +92,13 @@ class BuildLog  {
         $appendData=$data[1]??[];
 
         $line = "\n-------------------------------------------------------------------\n";
-        if (empty(request())) {
+        $request=request();
+        if (empty($request)) {
             $logInfo = $line;
             $requestParams = [];
         } else {
-            $logInfo = '  [request_IP]:' . request()->getRealIp() .'  [visit_URL]:'. ltrim(request()->fullUrl(), '/'). $line;
-            $requestParams = request()->all();
+            $logInfo = '  [request_IP]:' . $request->getRealIp() .'  [visit_URL]:'. ltrim($request->fullUrl(), '/'). $line;
+            $requestParams = $request->all();
         }
         $logInfo.=$msg?"record msg: ".$msg."\n":'';
         $exception=static::$instance->e;
@@ -110,7 +111,7 @@ class BuildLog  {
                 'trace' => array_slice(explode("\n", $exception->getTraceAsString()), 0, 4)]:[]
         ]);
 
-        $logInfo .= $writeData ? json_encode($writeData, JSON_UNESCAPED_UNICODE) . "\n" : "\n";
+        $logInfo .= $writeData ? json_encode($writeData, JSON_UNESCAPED_UNICODE) . "\n" :'';
 
         if(static::$instance->appendLog && static::$instance->channel!=='dailyCheck'){
             CustomLog::channel('dailyCheck')->$name($logInfo);

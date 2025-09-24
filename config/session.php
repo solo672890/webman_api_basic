@@ -42,7 +42,7 @@ return [
         ]
     ],
 
-    'session_name' => 'PHPSID',
+    'session_name' => 'JAVAsid',
     
     'auto_update_timestamp' => false,
 

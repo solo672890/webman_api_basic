@@ -2,9 +2,12 @@
 
 namespace app\controller\api\v1;
 
+use app\exception\LimiterException;
 use app\extends\log\BuildLog;
 use support\Log;
+use support\Redis;
 use support\Request;
+use Webman\RateLimiter\Limiter;
 
 class IndexController
 {
@@ -31,12 +34,25 @@ class IndexController
 
     public function testException(Request $request){
 
-        try {
-            $a=1;$b=0;
-            $c=$a/$b;
-        }catch (\Throwable $e){
-            BuildLog::channel('other')->appendLog(true)->addException($e)->error($e->getMessage(),['test'=>'我是追加数据']);
+//        var_dump($request->session()->getId());
+//        var_dump($request->header('user-agent', ''));
+//        executionTime(function () use ($request){
+//            for($i=0;$i<100000;$i++){
+//                $s=md5($request->session()->getId().$request->header('user-agent', '').$request->getRealIp());
+//                BuildLog::channel('other')->info($s);
+//                Redis::get($s);
+//                Redis::set($s, $s);
+//            }
+//        });
+
+
+        if($request->userId){
+//            Limiter::check($request->userId, 6, 2, function () {
+//                throw new LimiterException('请求频繁');
+//            });
         }
+
+
 
 
         return json(['code' => 0, 'msg' => 'ok']); //      5  0 13

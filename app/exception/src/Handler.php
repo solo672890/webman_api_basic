@@ -10,9 +10,6 @@ declare(strict_types=1);
 namespace app\exception\src;
 
 use app\exception\src\Exception\BaseException;
-use app\exception\src\Exception\ServerErrorHttpException;
-use FastRoute\BadRouteException;
-use InvalidArgumentException;
 use support\Log;
 use Throwable;
 use Webman\Exception\ExceptionHandler;

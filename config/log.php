@@ -41,18 +41,5 @@ return [
             ]
         ],
     ],
-    'other' => [
-        'handlers' => [
-            [
-                'class' => \support\MonologExtendHandler::class,
-                'constructor' => ['other', 10000000, //$maxFileSize
-                    Monolog\Logger::DEBUG,true, 0755
-                ],
-                'formatter' => [
-                    'class' => Monolog\Formatter\LineFormatter::class,
-                    'constructor' => [null, 'Y-m-d H:i:s', true,true],
-                ],
-            ]
-        ],
-    ],
+
 ];

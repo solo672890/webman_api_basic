@@ -27,7 +27,7 @@ use support\MonologExtendHandler;
 class CustomLog extends Log{
 
 
-    private static array $append_channel=['systemException','dailyCheck'];
+    private static array $append_channel=['systemException','dailyCheck','limiterException'];
     public static function channel(string $name = 'default') :Logger{
         if (!isset(static::$instance[$name])) {
             $config =self::buildLogConfig($name);
@@ -44,6 +44,7 @@ class CustomLog extends Log{
             return $config;
         }
         if(!in_array($name,self::$append_channel)){
+            var_dump($name);
             throw new \InvalidArgumentException("Channel not found in log config");
         }
 
