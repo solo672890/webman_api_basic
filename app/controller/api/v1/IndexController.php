@@ -7,6 +7,8 @@ use app\extends\log\BuildLog;
 use support\Log;
 use support\Redis;
 use support\Request;
+
+use support\think\Db;
 use Webman\RateLimiter\Limiter;
 
 class IndexController
@@ -34,28 +36,12 @@ class IndexController
 
     public function testException(Request $request){
 
-//        var_dump($request->session()->getId());
-//        var_dump($request->header('user-agent', ''));
-//        executionTime(function () use ($request){
-//            for($i=0;$i<100000;$i++){
-//                $s=md5($request->session()->getId().$request->header('user-agent', '').$request->getRealIp());
-//                BuildLog::channel('other')->info($s);
-//                Redis::get($s);
-//                Redis::set($s, $s);
-//            }
-//        });
 
-
-        if($request->userId){
-//            Limiter::check($request->userId, 6, 2, function () {
-//                throw new LimiterException('请求频繁');
-//            });
-        }
+        $user = Db::table('user')->where('id',1)->find();
 
 
 
-
-        return json(['code' => 0, 'msg' => 'ok']); //      5  0 13
+        return json(['code' => 0, 'msg' => 'ok1']); //      5  0 13
     }
 
     public function testException1(Request $request){

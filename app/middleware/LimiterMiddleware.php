@@ -48,7 +48,7 @@ class LimiterMiddleware implements MiddlewareInterface {
 
 
     protected function limiterExceptionHandler(string $key,string $header) {
-        Limiter::check($key, 3,7, function ()use($header) {
+        Limiter::check($key, 7,3, function ()use($header) {
             BuildLog::channel('limiterException')->warning($header);
             throw new LimiterException('请求频繁');
         });
